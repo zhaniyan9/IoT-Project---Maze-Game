@@ -1,0 +1,35 @@
+
+name: Maze Game Python Tests
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    env:
+      SDL_VIDEODRIVER: dummy
+      SDL_AUDIODRIVER: dummy
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Pygame
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pygame
+
+      - name: Check Python syntax
+        run: python -m py_compile Maze-Game
+
+      - name: Run automated tests
+        run: python -m unittest discover -s tests -v
